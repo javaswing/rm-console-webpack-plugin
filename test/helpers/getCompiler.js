@@ -16,11 +16,8 @@ export default (config = {}) => {
     module: {
       rules: [
         {
-          test: /\.txt/,
-          type: "asset/resource",
-          generator: {
-            filename: "asset-modules/[name][ext]",
-          },
+          test: /\.(js|jsx)$/,
+          use: 'babel-loader',
         },
       ],
     },

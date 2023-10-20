@@ -7,14 +7,12 @@ const pluginName = "RmConsoleWebpackPlugin";
 /** @typedef {import("schema-utils/declarations/validate").Schema} Schema */
 /** @typedef {import('webpack').Compiler} Compiler */
 /** @typedef {import("webpack").Compilation} Compilation */
+/** @typedef {Object} PluginOptions */
 
-/**
- * 一个WebpackPlugin, 就是一个Javascript类
- */
+
 class RmConsoleWebpackPlugin {
   /**
    * 构造函数
-   * @typedef {Object} PluginOptions
    *
    * @param {PluginOptions} options
    */
@@ -34,10 +32,7 @@ class RmConsoleWebpackPlugin {
    */
   // eslint-disable-next-line class-methods-use-this
   apply(compiler) {
-    // eslint-disable-next-line no-unused-vars
-    compiler.hooks.done.tap(pluginName, (stats) => {
-      console.log("Hello World");
-    });
+
   }
 }
 

@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RmConsoleWebpackPlugin should work: assets 1`] = `{}`;
-
 exports[`RmConsoleWebpackPlugin should work: errors 1`] = `[]`;
 
 exports[`RmConsoleWebpackPlugin should work: warnings 1`] = `[]`;
