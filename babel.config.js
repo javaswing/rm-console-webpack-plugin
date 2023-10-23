@@ -7,12 +7,10 @@ module.exports = (api) => {
   return {
     presets: [
       [
-        "@babel/preset-env",
+        '@babel/preset-env',
         {
-          exclude:
-            process.env.NODE_ENV === "test" ? [] : ["proposal-dynamic-import"],
           targets: {
-            node: "14.15.0",
+            node: '10.13.0',
           },
         },
       ],

@@ -8,18 +8,11 @@ import { createFsFromVolume, Volume } from "memfs";
 export default (config = {}) => {
   const fullConfig = {
     mode: "development",
-    context: path.resolve(__dirname, "../fixtures"),
-    entry: path.resolve(__dirname, "../helpers/enter.js"),
+    entry: path.resolve(__dirname, "../fixtures/index.js"),
     output: {
       path: path.resolve(__dirname, "../build"),
-    },
-    module: {
-      rules: [
-        {
-          test: /\.(js|jsx)$/,
-          use: 'babel-loader',
-        },
-      ],
+      filename: '[name].[chunkhash].js',
+      chunkFilename: '[id].[name].[chunkhash].js'
     },
     ...config,
   };
@@ -27,7 +20,11 @@ export default (config = {}) => {
   const compiler = webpack(fullConfig);
 
   if (!config.outputFileSystem) {
-    compiler.outputFileSystem = createFsFromVolume(new Volume());
+    const outputFileSystem = createFsFromVolume(new Volume());
+    // Todo remove when we drop webpack@4 support
+    outputFileSystem.join = path.join.bind(path);
+
+    compiler.outputFileSystem = outputFileSystem;
   }
 
   return compiler;
