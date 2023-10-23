@@ -2,6 +2,12 @@
 
 exports[`RmConsoleWebpackPlugin test rm console: errors 1`] = `[]`;
 
-exports[`RmConsoleWebpackPlugin test rm console: main.510eee11fbcff201957a.js 1`] = `4675`;
+exports[`RmConsoleWebpackPlugin test rm console: main.510eee11fbcff201957a.js 1`] = `"main.510eee11fbcff201957a.js"`;
+
+exports[`RmConsoleWebpackPlugin test rm console: main.510eee11fbcff201957a.js 2`] = `
+SizeOnlySource {
+  "_size": 4698,
+}
+`;
 
 exports[`RmConsoleWebpackPlugin test rm console: warnings 1`] = `[]`;

@@ -1,4 +1,5 @@
 import { validate } from 'schema-utils';
+import {Compilation as WebpackCompilation} from 'webpack';
 
 const schema = require('./schema.json');
 
@@ -59,31 +60,44 @@ class RmConsoleWebpackPlugin {
    */
   // eslint-disable-next-line class-methods-use-this
   apply(compiler) {
-    const {types} = this;
+    const { types } = this;
     compiler.hooks.emit.tap(pluginName, (compilation) => {
-      // eslint-disable-next-line guard-for-in
-      for (const name in compilation.assets) {
-        if (this.options.test.test(name)) {
-          const asset = compilation.assets[name];
-          const contents = asset.source();
-          if (typeof contents === 'string') {
-            const syntax = ['console', 'window.console'];
-            const consoleReg = new RegExp(
-              `(${syntax.join('|')}).(?:${types.join(
-                '|'
-              )})\\s{0,}\\([^;]*\\)(?!\\s*[;,]?\\s*\\/\\*\\s*\\s*\\*\\/)\\s{0,};?`,
-              'gi'
-            );
-            const noConsoles = contents.replace(consoleReg, '');
-            // @ts-ignore
-            compilation.assets[name] = {
-              source: () => noConsoles,
-              size: () => noConsoles.length,
-            };
-          }
-        }
-      }
+      compilation.hooks.processAssets.tap(
+        {
+          name: pluginName,
+          // @ts-ignore
+          stage: WebpackCompilation.PROCESS_ASSETS_STAGE_DEV_TOOLING,
+          additionalAssets: true,
+        },
+        (assets) => this.dropConsole(assets, compilation)
+      );
     });
+  }
+
+  /**
+   * @param {import("webpack").Compilation} compilation
+   */
+  // @ts-ignore
+  dropConsole(assets, compilation) {
+    const assetKeys = Object.keys(assets);
+    for (const key of assetKeys) {
+      if (this.options.test.test(key)) {
+        let contents = assets[key].source();
+        const syntax = ['console', 'window.console'];
+        const consoleReg = new RegExp(
+          `(${syntax.join('|')}).(?:${this.types.join(
+            '|'
+          )})\\s{0,}\\([^;]*\\)(?!\\s*[;,]?\\s*\\/\\*\\s*\\s*\\*\\/)\\s{0,};?`,
+          'gi'
+        );
+        const noConsoles = contents.replace(consoleReg, '');
+        // @ts-ignore
+        compilation.assets[key] = {
+          source: () => noConsoles,
+          size: () => noConsoles.length,
+        };
+      }
+    }
   }
 }
 

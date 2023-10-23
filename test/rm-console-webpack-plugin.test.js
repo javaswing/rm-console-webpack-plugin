@@ -19,8 +19,9 @@ describe("RmConsoleWebpackPlugin", () => {
         if (
           Object.prototype.hasOwnProperty.call(stats.compilation.assets, file)
         ) {
-          console.log('file', stats.compilation.assets[file])
-          expect(stats.compilation.assets[file].size()).toMatchSnapshot(file);
+          const asset = stats.compilation.getAsset(file)
+          expect(asset.name).toMatchSnapshot(file);
+          expect(asset.source).toMatchSnapshot(file);
         }
       }
     });
